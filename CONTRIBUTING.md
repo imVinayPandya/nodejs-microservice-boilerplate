@@ -10,3 +10,22 @@ Regarding variables same "rules" apply as for filenames. Prototypes or classes h
 
 ## run lint to check linting
     ```npm run lint .```
+
+## throw proper error
+
+  ```// throwing an Error from typical function, whether sync or async
+  if(!productToAdd)
+      throw new Error("How can I add new product when no value provided?");
+
+  // 'throwing' an Error from EventEmitter
+  const myEmitter = new MyEmitter();
+  myEmitter.emit('error', new Error('whoops!'));
+
+  // 'throwing' an Error from a Promise
+  return new Promise(function (resolve, reject) {
+      return DAL.getProduct(productToAdd.id).then((existingProduct) => {
+          if(existingProduct != null)
+              reject(new Error("Why fooling us and trying to add an existing product?"));
+      });
+  });```
+  

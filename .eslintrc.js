@@ -13,6 +13,7 @@ module.exports = {
         'useTabs': false
       }
     ],
+    'no-underscore-dangle': 0
   },
   plugins: [
     'prettier'

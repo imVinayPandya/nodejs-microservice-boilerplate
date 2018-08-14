@@ -4,37 +4,17 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('golden-eye-server:server');
-var http = require('http');
-
-/**
- * Get port from environment and store in Express.
- */
-
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-
-var server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+const debug = require('debug')('golden-eye-server:server');
+const http = require('http');
+const app = require('../app');
+const logger = require('../utils/logger');
 
 /**
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
-  var port = parseInt(val, 10);
+const normalizePort = val => {
+  const port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -47,44 +27,121 @@ function normalizePort(val) {
   }
 
   return false;
-}
+};
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+const port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+const server = http.createServer(app);
 
 /**
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+const onError = error => {
   if (error.syscall !== 'listen') {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      console.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      console.error(`${bind} is already in use`);
       process.exit(1);
       break;
     default:
       throw error;
   }
-}
+};
 
 /**
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-}
+const onListening = () => {
+  const addr = server.address();
+  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
+  debug(`Listening on ${bind}`);
+};
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+const shutdownServer = () => {
+  // console.log("Received kill singal to gracefully shutdown a server in SIGTERM/SIGINT");
+  server.close(() => {
+    logger.log('info', 'Gracefully shutdown server');
+    process.exit(0);
+  });
+  setTimeout(() => {
+    logger.log('info', 'All remaining pending unclosed connections should shutdown forcefully.');
+    process.exit(0);
+  }, 5000);
+};
+
+process
+  .on('SIGINT', () => {
+    /**
+     * SIGTERM and SIGINT have default handlers on non-Windows platforms that resets the terminal mode before exiting with code 128 + signal number.
+     * If one of these signals has a listener installed, its default behavior will be removed (Node.js will no longer exit).
+     */
+    // console.log('CLOSING [SIGINT]');
+    shutdownServer();
+  })
+  .on('SIGTERM', () => {
+    /**
+     * SIGTERM is used to cause a program termination.
+     * It is a way to politely ask a program to terminate.
+     * The program can either handle this signal, clean up resources and then exit, or it can ignore the signal.
+     */
+    // console.log('CLOSING [SIGTERM]');
+    shutdownServer();
+  })
+  .on('SIGTSTP', () => {
+    // console.log('CLOSING [SIGTSTP]');
+    shutdownServer();
+  })
+  .on('SIGTSTOP', () => {
+    // console.log('CLOSING [SIGTSTOP]');
+    shutdownServer();
+  })
+  .on('SIGHUP', () => {
+    // console.log('CLOSING [SIGHUP]');
+    shutdownServer();
+  })
+  .on('SIGQUIT', () => {
+    // console.log('CLOSING [SIGQUIT]');
+    shutdownServer();
+  })
+  .on('SIGABRT', () => {
+    // console.log('CLOSING [SIGABRT]');
+    shutdownServer();
+  })
+  // Start reading from stdin so we don't exit.
+  .on('unhandledRejection', error => {
+    logger.error(`unhandledRejection`);
+    throw error;
+  })
+  .on('uncaughtException', error => {
+    logger.error(`uncaughtException ${error}`);
+    process.exit(1);
+  });

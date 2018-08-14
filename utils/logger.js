@@ -26,8 +26,7 @@ const levels = {
 
 const logger = createLogger({
   levels,
-  level: 'info',
-  format: format.json(),
+  format: format.prettyPrint(),
   transports: [
     //
     // - Write to all logs with level `info` and below to `combined.log`
@@ -35,19 +34,23 @@ const logger = createLogger({
     //
     new DailyRotateFile({
       filename: errorLogFileName,
-      datePattern: 'YYYY-MM-DD-HH',
+      datePattern: 'YYYY-MM-DD-HH', // rotate file based on hours
       zippedArchive: true,
       maxSize: '20m',
       maxFiles: '14d',
       level: 'error',
+      json: false,
+      humanReadableUnhandledException: true,
+      handleExceptions: true,
     }),
     new DailyRotateFile({
       filename: applicationLogFileName,
-      datePattern: 'YYYY-MM-DD-HH',
+      datePattern: 'YYYY-MM-DD-HH', // rotate file based on hours
       zippedArchive: true,
       maxSize: '20m',
       maxFiles: '14d',
-      format: combine(colorize(), timestamp(), logFormat),
+      humanReadableUnhandledException: true,
+      handleExceptions: true,
     }),
   ],
 });
