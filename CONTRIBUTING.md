@@ -8,8 +8,24 @@ Regarding filenames most common are short, lower-case filenames. If your file ca
 
 Regarding variables same "rules" apply as for filenames. Prototypes or classes however should use camel-case.
 
+    For example:
+      `// for class name we use UpperCamelCase
+      class SomeClassExample {}
+
+      // for const names we use the const keyword and lowerCamelCase
+      const config = {
+        key: 'value'
+      };
+
+      // for variables and functions names we use lowerCamelCase
+      let someVariableExample = 'value';
+      function doSomething() {}`
+
 ## run lint to check linting
-    ```npm run lint .```
+    npm run lint
+
+## run test
+    npm run test
 
 ## throw proper error
 

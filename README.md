@@ -1,13 +1,14 @@
 # TODO
 
-[] Basic express app setup
-[] Eslint
-[] Logger: Winston
-[] Centralized handling
-[]
-[]
-[]
-[] Swagger doc
+
+- [x] Basic express app setup
+- [x] Eslint
+- [x] Logger: Winston
+- [x] Centralized handling
+- [x] Api Test cases: Basic Mocha test setup
+- [] Git Prehook
+- [] Swagger doc
+- [] Js Doc: Documantation within a code
 
 # GIT Tips and Tricks
 

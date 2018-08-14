@@ -1,7 +1,7 @@
 module.exports = {
   root: true, // make to not take in any user specified rules in parent folders
   parser: 'babel-eslint',
-  extends: ['airbnb-base', 'prettier'],
+  extends: ['airbnb-base', 'prettier', 'plugin:security/recommended'],
   rules: {
     'prettier/prettier': [
       'error',
@@ -16,6 +16,7 @@ module.exports = {
     'no-underscore-dangle': 0
   },
   plugins: [
-    'prettier'
+    'prettier',
+    'security'
   ]
 };
