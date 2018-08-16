@@ -1,26 +1,35 @@
-const express = require('express');
-const path = require('path');
-const morgan = require('morgan');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const express = require('express');
 const helmet = require('helmet');
+const morgan = require('morgan');
+const path = require('path');
+const swaggerUi = require('swagger-ui-express');
 
 const { logger } = require('./utils/logger');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const { AppError: CustomError } = require('./utils/customError');
 
+const options = {
+  swaggerUrl: 'http://petstore.swagger.io/v2/swagger.json',
+  customCss: '.swagger-ui .topbar { display: none }',
+};
+
 const app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'ejs');
+app.set('view engine', 'ejs');
 
 app.use(helmet());
+app.use(cors());
 app.use(morgan('combined', { stream: logger.stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, options));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
