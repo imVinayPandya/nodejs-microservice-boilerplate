@@ -1,5 +1,5 @@
 {
-  "name": "golden-eye-server",
+  "name": "gateway",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -13,6 +13,7 @@
     "test"
   ],
   "dependencies": {
+    "bluebird": "^3.5.1",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.4",
     "debug": "~2.6.9",
@@ -20,10 +21,15 @@
     "ejs": "~2.5.7",
     "eslint-config-prettier": "^3.0.1",
     "express": "~4.16.0",
+    "express-promise-router": "^3.0.3",
     "helmet": "^3.13.0",
     "http-errors": "~1.6.2",
+    "lodash": "^4.17.10",
+    "mocha": "^5.2.0",
     "moment": "^2.22.2",
     "morgan": "^1.9.0",
+    "should": "^13.2.3",
+    "superagent": "^3.8.3",
     "swagger-ui-express": "^3.0.10",
     "winston": "^3.0.0",
     "winston-daily-rotate-file": "^3.3.0"
@@ -35,11 +41,8 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-security": "^1.4.0",
-    "mocha": "^5.2.0",
     "nodemon": "^1.18.3",
     "pre-push": "^0.1.1",
-    "prettier-eslint": "^8.8.2",
-    "should": "^13.2.3",
-    "superagent": "^3.8.3"
+    "prettier-eslint": "^8.8.2"
   }
 }

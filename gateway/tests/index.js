@@ -2,7 +2,7 @@ const { describe, it } = require('mocha');
 const request = require('superagent');
 const should = require('should');
 
-const api = 'http://localhost:3000';
+const api = 'http://localhost:9090';
 
 describe('API Test', () => {
   describe('Server is running', () => {

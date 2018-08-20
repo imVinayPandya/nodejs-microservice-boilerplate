@@ -1,6 +1,5 @@
 # TODO
 
-
 - [x] Basic express app setup
 - [x] Eslint
 - [x] Logger: Winston
@@ -11,10 +10,11 @@
 - [x] Config file which can be override by .env file by deveops
 - [] Js Doc: Documantation within a code
 - [] clustering
-- [] dockerize
+- [x] dockerize
 - [] nginx docker
 - [] SSL
 - [] CI, CD
+- [] Api versioning
 
 # Env
 

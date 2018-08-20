@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 require('dotenv').config();
-// const debug = require('debug')('golden-eye-server:server');
+// const debug = require('debug')('gateway');
 const http = require('http');
 const app = require('../app');
 const { logger } = require('../utils/logger');

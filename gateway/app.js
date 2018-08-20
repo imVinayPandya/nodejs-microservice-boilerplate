@@ -9,7 +9,7 @@ const swaggerUi = require('swagger-ui-express');
 const { logger } = require('./utils/logger');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const { AppError: CustomError } = require('./utils/customError');
+const { _404 } = require('./utils/customError');
 
 const options = {
   swaggerUrl: 'http://petstore.swagger.io/v2/swagger.json',
@@ -29,26 +29,27 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, options));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, options));
+
+app.get('/favicon.ico', (req, res) => res.status(204));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  next(new CustomError('Note Found', 404, 'Url not found', false));
+  const err = _404('not found');
+  return next(err);
 });
 
 // error handler
 app.use((err, req, res) => {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
   // add this line to include winston logging
   logger.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  return res.status(err.statusCode || 500).json({
+    // errorCode: err.errorCode || 500,
+    reason: err.statusCode === 500 ? 'Something went wrong' : err.message,
+    success: false,
+  });
 });
 
 module.exports = app;

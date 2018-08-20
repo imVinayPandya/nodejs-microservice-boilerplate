@@ -8,7 +8,7 @@ function AppError(name, httpCode, description, isOperational) {
   this.statusCode = httpCode;
   this.message = description;
   this.isOperational = isOperational;
-  logger.error(`${this.statusCode || 500} - ${this.message}`, this);
+  // logger.error(`${this.statusCode || 500} - ${this.message}`, this);
 }
 
 require('util').inherits(AppError, Error);

@@ -1,0 +1,29 @@
+version: '3.5'
+
+services:
+  gateway:
+    image: gateway
+    build: ./gateway
+    ports: 
+      - "9090:9090"
+    depends_on: 
+      - user
+    volumes:
+      - ./gateway:/app
+
+  user:
+    image: user
+    build: ./user
+    ports:
+      - "9091:9091"
+    depends_on: 
+      - postgres
+    volumes:
+      - ./user:/app
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  
